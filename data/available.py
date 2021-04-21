@@ -18,7 +18,6 @@ AVAILABLE_TRANSFORMS = {
         transforms.ToTensor(),
     ],
     'fmnist': [
-        transforms.Pad(2),
         transforms.ToTensor(),
     ],
     'mnist28': [
