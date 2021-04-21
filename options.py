@@ -79,7 +79,7 @@ def add_task_options(parser, only_MNIST=False, single_task=False, compare_code="
         task_choices = ['CIFAR10', 'CIFAR100', 'MNIST', 'MNIST28']
         task_default = 'CIFAR10'
     else:
-        MNIST_tasks = ['splitMNIST', 'permMNIST']
+        MNIST_tasks = ['splitMNIST', 'permMNIST', 'fmnist']
         image_tasks = ['CIFAR100']
         task_choices = MNIST_tasks if only_MNIST else MNIST_tasks+image_tasks
         task_default = 'splitMNIST' if only_MNIST else 'CIFAR100'
@@ -293,15 +293,15 @@ def set_defaults(args, only_MNIST=False, single_task=False, generative=True, com
         args.dg_type = ("task" if args.experiment=='permMNIST' else "class") if args.dg_type is None else args.dg_type
     if not single_task:
         args.tasks= (
-            5 if args.experiment=='splitMNIST' else (10 if args.experiment=="CIFAR100" else 100)
+            5 if args.experiment in ['splitMNIST', 'fmnist'] else (10 if args.experiment=="CIFAR100" else 100)
         ) if args.tasks is None else args.tasks
         args.iters = (5000 if args.experiment=='CIFAR100' else 2000) if args.iters is None else args.iters
-        args.lr = (0.001 if args.experiment=='splitMNIST' else 0.0001) if args.lr is None else args.lr
-        args.batch = (128 if args.experiment=='splitMNIST' else 256) if args.batch is None else args.batch
-        args.fc_units = (400 if args.experiment=='splitMNIST' else 2000) if args.fc_units is None else args.fc_units
+        args.lr = (0.001 if args.experiment in ['splitMNIST', 'fmnist'] else 0.0001) if args.lr is None else args.lr
+        args.batch = (128 if args.experiment in ['splitMNIST', 'fmnist'] else 256) if args.batch is None else args.batch
+        args.fc_units = (400 if args.experiment in ['splitMNIST', 'fmnist'] else 2000) if args.fc_units is None else args.fc_units
     # -set hyper-parameter values (typically found by grid-search) based on chosen experiment & scenario
     if not single_task and not compare_code in ('hyper', 'bir'):
-        if args.experiment=='splitMNIST':
+        if args.experiment in ['splitMNIST', 'fmnist']:
             args.xdg_prop = 0.9 if args.scenario=="task" and args.xdg_prop is None else args.xdg_prop
             args.si_c = (10. if args.scenario=='task' else 0.1) if args.si_c is None else args.si_c
             args.ewc_lambda = (
