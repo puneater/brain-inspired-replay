@@ -150,6 +150,37 @@ def get_multitask_experiment(name, scenario, tasks, data_dir="./store/datasets",
                 if not only_test:
                     train_datasets.append(SubDataset(mnist_train, labels, target_transform=target_transform))
                 test_datasets.append(SubDataset(mnist_test, labels, target_transform=target_transform))
+    elif name == 'fmnist':
+        # check for number of tasks
+        if tasks>10:
+            raise ValueError("Experiment '{}' cannot have more than 10 tasks!".format(name))
+        # configurations
+        config = DATASET_CONFIGS['fmnist']
+        classes_per_task = int(np.floor(10 / tasks))
+        if not only_config:
+            # prepare permutation to shuffle label-ids (to create different class batches for each random seed)
+            permutation = np.array(list(range(10))) if exception else np.random.permutation(list(range(10)))
+            target_transform = transforms.Lambda(lambda y, p=permutation: int(p[y]))
+            # prepare train and test datasets with all classes
+            if not only_test:
+                fmnist_train = get_dataset('fmnist', type="train", dir=data_dir, target_transform=target_transform,
+                                          verbose=verbose)
+            fmnist_test = get_dataset('fmnist', type="test", dir=data_dir, target_transform=target_transform,
+                                     verbose=verbose)
+            # generate labels-per-task
+            labels_per_task = [
+                list(np.array(range(classes_per_task)) + classes_per_task * task_id) for task_id in range(tasks)
+            ]
+            # split them up into sub-tasks
+            train_datasets = []
+            test_datasets = []
+            for labels in labels_per_task:
+                target_transform = transforms.Lambda(
+                    lambda y, x=labels[0]: y - x
+                ) if scenario=='domain' else None
+                if not only_test:
+                    train_datasets.append(SubDataset(fmnist_train, labels, target_transform=target_transform))
+                test_datasets.append(SubDataset(fmnist_test, labels, target_transform=target_transform))
     elif name == 'CIFAR100':
         # check for number of tasks
         if tasks>100:
