@@ -7,6 +7,7 @@ AVAILABLE_DATASETS = {
     'mnist': datasets.MNIST,
     'cifar10': datasets.CIFAR10,
     'cifar100': datasets.CIFAR100,
+    'fmnist': datasets.FashionMNIST,
 }
 
 
@@ -49,6 +50,7 @@ AVAILABLE_TRANSFORMS = {
 # Specify configurations of available data-sets
 DATASET_CONFIGS = {
     'mnist': {'size': 32, 'channels': 1, 'classes': 10},
+    'fmnist': {'size': 28, 'channels': 1, 'classes': 10},
     'mnist28': {'size': 28, 'channels': 1, 'classes': 10},
     'cifar10': {'size': 32, 'channels': 3, 'classes': 10},
     'cifar100': {'size': 32, 'channels': 3, 'classes': 100},
