@@ -210,7 +210,38 @@ def get_multitask_experiment(name, scenario, tasks, data_dir="./store/datasets",
                 if not only_test:
                     train_datasets.append(SubDataset(cifar100_train, labels, target_transform=target_transform))
                 test_datasets.append(SubDataset(cifar100_test, labels, target_transform=target_transform))
-    else:
+    elif name == 'ASL':
+        # check for number of tasks
+        if tasks > 29:
+            raise ValueError(
+                "Experiment 'ASL' cannot have more than 29 tasks!")
+        # configurations
+        config = DATASET_CONFIGS['ASL']
+        classes_per_task = int(np.floor(29 / tasks))
+        if not only_config:
+            # prepare permutation to shuffle label-ids (to create different class batches for each random seed)
+            
+            # prepare train and test datasets with all classes
+            if not only_test:
+                cifar100_train = get_dataset('ASL', type="train", dir=data_dir, normalize=normalize,
+                                             augment=augment, verbose=verbose)
+            cifar100_test = get_dataset('ASL', type="test", dir=data_dir, normalize=normalize, verbose=verbose)
+            # generate labels-per-task
+            labels_per_task = [
+                list(np.array(range(classes_per_task)) + classes_per_task * task_id) for task_id in range(tasks)
+            ]
+            # split them up into sub-tasks
+            train_datasets = []
+            test_datasets = []
+            for labels in labels_per_task:
+                target_transform = transforms.Lambda(
+                    lambda y, x=labels[0]: y-x) if scenario == 'domain' else None
+                if not only_test:
+                    train_datasets.append(SubDataset(
+                        cifar100_train, labels, target_transform=target_transform))
+                test_datasets.append(SubDataset(
+                    cifar100_test, labels, target_transform=target_transform))
+    
         raise RuntimeError('Given undefined experiment: {}'.format(name))
 
     # If needed, update number of (total) classes in the config-dictionary
