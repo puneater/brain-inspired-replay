@@ -3,7 +3,8 @@ import torchvision
 
 
 class ASL(Dataset):
-    def __init__(self,root_dir = None,transforms = None):
+    def __init__(self, root_dir, train=False if type=='test' else True,
+                 download=True, transforms=None, target_transform=None):
         dataset = torchvision.datasets.ImageFolder(root=root_dir,transforms=transforms)
         self.classes = dataset.classes
         self.samples = dataset.samples
