@@ -6,7 +6,7 @@ from data.available import AVAILABLE_DATASETS, AVAILABLE_TRANSFORMS, DATASET_CON
 from data.manipulate import ReducedDataset, SubDataset, TransformedDataset, permutate_image_pixels
 
 def get_dataset(name, type='train', download=True, capacity=None, permutation=None, dir='./store/datasets',
-                verbose=False, augment=False, normalize=False, target_transform=None, valid_prop=0.):
+                verbose=False, augment=False, normalize=False, target_transform=None, valid_prop=0):
     '''Create [train|valid|test]-dataset.'''
 
     data_name = 'mnist' if name in ('mnist28') else name
@@ -226,10 +226,15 @@ def get_multitask_experiment(name, scenario, tasks, data_dir="./store/datasets",
                 ASL_train = get_dataset('ASL', type="train", dir=data_dir, normalize=normalize,
                                              augment=augment, verbose=verbose)
             ASL_test = get_dataset('ASL', type="test", dir=data_dir, normalize=normalize, verbose=verbose)
+
+            
+
             # generate labels-per-task
             labels_per_task = [
                 list(np.array(range(classes_per_task)) + classes_per_task * task_id) for task_id in range(tasks)
             ]
+            print("Before Subdataset")
+            print(ASL_train[0])
             # split them up into sub-tasks
             train_datasets = []
             test_datasets = []
@@ -241,7 +246,11 @@ def get_multitask_experiment(name, scenario, tasks, data_dir="./store/datasets",
                         ASL_train, labels, target_transform=target_transform))
                 test_datasets.append(SubDataset(
                     ASL_test, labels, target_transform=target_transform))
-    
+            
+            loader = DataLoader(train_datasets[0], 1, shuffle=True,
+                                num_workers=2, pin_memory=True)
+            #print(next(iter(loader)))
+    else:
         raise RuntimeError('Given undefined experiment: {}'.format(name))
 
     # If needed, update number of (total) classes in the config-dictionary

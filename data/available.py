@@ -1,5 +1,4 @@
 from torchvision import datasets, transforms
-from torchvision.transforms.transforms import Resize
 from data.manipulate import UnNormalize
 from data.ASL import ASL
 

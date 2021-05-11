@@ -80,7 +80,7 @@ def add_task_options(parser, only_MNIST=False, single_task=False, compare_code="
         task_default = 'CIFAR10'
     else:
         MNIST_tasks = ['splitMNIST', 'permMNIST', 'fmnist']
-        image_tasks = ['CIFAR100']
+        image_tasks = ['CIFAR100','ASL']
         task_choices = MNIST_tasks if only_MNIST else MNIST_tasks+image_tasks
         task_default = 'splitMNIST' if only_MNIST else 'CIFAR100'
     task_params.add_argument('--experiment', type=str, default=task_default, choices=task_choices)
@@ -301,7 +301,7 @@ def set_defaults(args, only_MNIST=False, single_task=False, generative=True, com
         args.fc_units = (400 if args.experiment in ['splitMNIST', 'fmnist'] else 2000) if args.fc_units is None else args.fc_units
     # -set hyper-parameter values (typically found by grid-search) based on chosen experiment & scenario
     if not single_task and not compare_code in ('hyper', 'bir'):
-        if args.experiment in ['splitMNIST', 'fmnist']:
+        if args.experiment in ['splitMNIST', 'fmnist','ASL']:
             args.xdg_prop = 0.9 if args.scenario=="task" and args.xdg_prop is None else args.xdg_prop
             args.si_c = (10. if args.scenario=='task' else 0.1) if args.si_c is None else args.si_c
             args.ewc_lambda = (

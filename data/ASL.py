@@ -1,37 +1,52 @@
-from torch.utils.data import Dataset, dataset
+from torch.utils.data import Dataset
 import torchvision
 import os
+from google_drive_downloader import GoogleDriveDownloader as gdd
+
 
 class ASL(Dataset):
-    def __init__(self, root_dir, train=True, download=False, transforms=None, target_transform=None):
+    def __init__(self, root_dir, train=True, download=True, transform=None, target_transform=None):
+        self.root_dir = root_dir
         if train:
-            root_dir = os.path.join(root_dir,"train")
+            self.dir = os.path.join(self.root_dir,"train")
         else:
-            root_dir = os.path.join(root_dir,"test")
-        self.transforms = transforms
+            self.dir = os.path.join(self.root_dir,"test")
+        self.transforms = transform
         self.target_transform = target_transform
-        dataset = torchvision.datasets.ImageFolder(root=root_dir,transforms=transforms)
-        self.classes = dataset.classes
-        self.samples = dataset.samples
-        self.class_to_idx = dataset.class_to_idx
-        self.targets = dataset.targets
-        self.imgs = dataset.imgs  
-
         if download:
-            self.download()
+            self.download(path=self.root_dir)
+            
+        self.dataset = torchvision.datasets.ImageFolder(
+            root=self.dir, transform=transform)
+    
 
 
     def __len__(self):
-        return len(self.samples)
+        return len(self.dataset)
 
     def __getitem__(self, idx):
-        img, target = self.samples[idx]
-        target = self.target_transform(target)
-        return img,target
+        img, target = self.dataset[idx]
+        if self.target_transform:
+            target = self.target_transform(target)
+        return (img,target)
          
-    def download(self):
+    def download(self,path):
         '''
-        Add download logic
+        Download dataset if not present
         '''
+        url = "https://drive.google.com/file/d/19d3nqn0GgT4gYpzPWsIlQeaIoBNu9y6A/view?usp=sharing"
+        id = url.split("/")[5]
+        zipName = "ASL.zip"
+        if not os.path.isdir(path):
+            ogPath = os.path.split(path)[0]
+            gdd.download_file_from_google_drive(file_id=id,
+                                                dest_path=os.path.join(
+                                                  ogPath  , zipName),
+                                                unzip=True)
+            os.remove(os.path.join(ogPath,zipName))
+            print("Downloaded")
+        else:
+            print("Dataset already downloaded")
+
 
     
