@@ -246,10 +246,40 @@ def get_multitask_experiment(name, scenario, tasks, data_dir="./store/datasets",
                         ASL_train, labels, target_transform=target_transform))
                 test_datasets.append(SubDataset(
                     ASL_test, labels, target_transform=target_transform))
+    elif name == 'fruits360':
+        # check for number of tasks
+        if tasks > 131:
+            raise ValueError(
+                "Experiment 'fruits360' cannot have more than 131 tasks!")
+        # configurations
+        config = DATASET_CONFIGS['fruits360']
+        classes_per_task = int(np.floor(131 / tasks))
+        if not only_config:
+            # prepare permutation to shuffle label-ids (to create different class batches for each random seed)
+
+            # prepare train and test datasets with all classes
+            if not only_test:
+                ASL_train = get_dataset('fruits360', type="train", dir=data_dir, normalize=normalize,
+                                        augment=augment, verbose=verbose)
+            ASL_test = get_dataset(
+                'fruits360', type="test", dir=data_dir, normalize=normalize, verbose=verbose)
+
+            # generate labels-per-task
+            labels_per_task = [
+                list(np.array(range(classes_per_task)) + classes_per_task * task_id) for task_id in range(tasks)
+            ]
+            # split them up into sub-tasks
+            train_datasets = []
+            test_datasets = []
+            for labels in labels_per_task:
+                target_transform = transforms.Lambda(
+                    lambda y, x=labels[0]: y-x) if scenario == 'domain' else None
+                if not only_test:
+                    train_datasets.append(SubDataset(
+                        ASL_train, labels, target_transform=target_transform))
+                test_datasets.append(SubDataset(
+                    ASL_test, labels, target_transform=target_transform))
             
-            loader = DataLoader(train_datasets[0], 1, shuffle=True,
-                                num_workers=2, pin_memory=True)
-            #print(next(iter(loader)))
     else:
         raise RuntimeError('Given undefined experiment: {}'.format(name))
 

@@ -1,6 +1,7 @@
 from torchvision import datasets, transforms
 from data.manipulate import UnNormalize
-from data.ASL import ASL
+from data.customDatasets.ASL import ASL
+from data.customDatasets.fruits360 import fruits360
 
 
 # Specify available data-sets
@@ -9,7 +10,8 @@ AVAILABLE_DATASETS = {
     'cifar10': datasets.CIFAR10,
     'cifar100': datasets.CIFAR100,
     'fmnist': datasets.FashionMNIST,
-    'ASL' : ASL
+    'ASL' : ASL,
+    'fruits360': fruits360
 }
 
 
@@ -39,6 +41,15 @@ AVAILABLE_TRANSFORMS = {
         transforms.Normalize(mean=[0.5175, 0.4902, 0.5006], std=[0.1981, 0.2310, 0.2434])
     ],
     'ASL_denorm': UnNormalize(mean=[0.5175, 0.4902, 0.5006], std=[0.1981, 0.2310, 0.2434]),
+    'fruits360': [
+        transforms.Resize((32, 32)),
+        transforms.ToTensor(),
+    ],
+    'fruits360_norm': [
+        transforms.Normalize(mean=[0.5175, 0.4902, 0.5006], std=[
+                             0.1981, 0.2310, 0.2434])
+    ],
+    'fruits360_denorm': UnNormalize(mean=[0.5175, 0.4902, 0.5006], std=[0.1981, 0.2310, 0.2434]),
     'cifar10_norm': [
         transforms.Normalize(mean=[0.4914, 0.4822, 0.4465], std=[0.2470, 0.2435, 0.2616])
     ],
@@ -68,4 +79,5 @@ DATASET_CONFIGS = {
     'cifar10': {'size': 32, 'channels': 3, 'classes': 10},
     'cifar100': {'size': 32, 'channels': 3, 'classes': 100},
     'ASL':{'size':64,'channels':3,'classes':29},
+    'fruits360': {'size': 32, 'channels': 3, 'classes': 131},
 }
