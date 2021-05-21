@@ -2,6 +2,10 @@ from torchvision import datasets, transforms
 from data.manipulate import UnNormalize
 from data.customDatasets.ASL import ASL
 from data.customDatasets.fruits360 import fruits360
+from data.customDatasets.chars74K import chars74K
+from data.customDatasets.gtsrb import gtsrb
+
+
 
 
 # Specify available data-sets
@@ -11,7 +15,9 @@ AVAILABLE_DATASETS = {
     'cifar100': datasets.CIFAR100,
     'fmnist': datasets.FashionMNIST,
     'ASL' : ASL,
-    'fruits360': fruits360
+    'fruits360': fruits360,
+    'chars74K': chars74K,
+    'gtsrb': gtsrb,
 }
 
 
@@ -42,14 +48,32 @@ AVAILABLE_TRANSFORMS = {
     ],
     'ASL_denorm': UnNormalize(mean=[0.5175, 0.4902, 0.5006], std=[0.1981, 0.2310, 0.2434]),
     'fruits360': [
-        transforms.Resize((32, 32)),
+        transforms.Resize((32,32)),
         transforms.ToTensor(),
     ],
     'fruits360_norm': [
-        transforms.Normalize(mean=[0.5175, 0.4902, 0.5006], std=[
-                             0.1981, 0.2310, 0.2434])
+        transforms.Normalize(mean=[0.6836, 0.5780, 0.5031], std=[
+                             0.2473, 0.3104, 0.3545])
     ],
-    'fruits360_denorm': UnNormalize(mean=[0.5175, 0.4902, 0.5006], std=[0.1981, 0.2310, 0.2434]),
+    'fruits360_denorm': UnNormalize(mean=[0.6836, 0.5780, 0.5031], std=[0.2473, 0.3104, 0.3545]),
+    'chars74K': [
+        transforms.Resize((64,64)),
+        transforms.ToTensor(),
+    ],
+    'chars74K_norm': [
+        transforms.Normalize(mean=[0.8284, 0.8284, 0.8284], std=[
+                             0.3438, 0.3438, 0.3438])
+    ],
+    'chars74K_denorm': UnNormalize(mean=[0.8284, 0.8284, 0.8284], std=[0.3438, 0.3438, 0.3438]),
+    'gtsrb': [
+        transforms.Resize((32, 32)),
+        transforms.ToTensor(),
+    ],
+    'gtsrb_norm': [
+        transforms.Normalize(mean=[0.3403, 0.3121, 0.3214], std=[
+                             0.1595, 0.1590, 0.1683])
+    ],
+    'gtsrb_denorm': UnNormalize(mean=[0.3403, 0.3121, 0.3214], std=[0.1595, 0.1590, 0.1683]),
     'cifar10_norm': [
         transforms.Normalize(mean=[0.4914, 0.4822, 0.4465], std=[0.2470, 0.2435, 0.2616])
     ],
@@ -80,4 +104,6 @@ DATASET_CONFIGS = {
     'cifar100': {'size': 32, 'channels': 3, 'classes': 100},
     'ASL':{'size':64,'channels':3,'classes':29},
     'fruits360': {'size': 32, 'channels': 3, 'classes': 131},
+    'chars74K': {'size': 64, 'channels': 3, 'classes': 10},
+    'gtsrb': {'size': 32, 'channels': 3, 'classes': 43},
 }

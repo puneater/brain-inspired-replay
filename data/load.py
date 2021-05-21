@@ -220,7 +220,6 @@ def get_multitask_experiment(name, scenario, tasks, data_dir="./store/datasets",
         classes_per_task = int(np.floor(29 / tasks))
         if not only_config:
             # prepare permutation to shuffle label-ids (to create different class batches for each random seed)
-            
             # prepare train and test datasets with all classes
             if not only_test:
                 ASL_train = get_dataset('ASL', type="train", dir=data_dir, normalize=normalize,
@@ -233,8 +232,6 @@ def get_multitask_experiment(name, scenario, tasks, data_dir="./store/datasets",
             labels_per_task = [
                 list(np.array(range(classes_per_task)) + classes_per_task * task_id) for task_id in range(tasks)
             ]
-            print("Before Subdataset")
-            print(ASL_train[0])
             # split them up into sub-tasks
             train_datasets = []
             test_datasets = []
@@ -255,13 +252,12 @@ def get_multitask_experiment(name, scenario, tasks, data_dir="./store/datasets",
         config = DATASET_CONFIGS['fruits360']
         classes_per_task = int(np.floor(131 / tasks))
         if not only_config:
-            # prepare permutation to shuffle label-ids (to create different class batches for each random seed)
 
             # prepare train and test datasets with all classes
             if not only_test:
-                ASL_train = get_dataset('fruits360', type="train", dir=data_dir, normalize=normalize,
+                fruits360_train = get_dataset('fruits360', type="train", dir=data_dir, normalize=normalize,
                                         augment=augment, verbose=verbose)
-            ASL_test = get_dataset(
+            fruits360_test = get_dataset(
                 'fruits360', type="test", dir=data_dir, normalize=normalize, verbose=verbose)
 
             # generate labels-per-task
@@ -276,9 +272,72 @@ def get_multitask_experiment(name, scenario, tasks, data_dir="./store/datasets",
                     lambda y, x=labels[0]: y-x) if scenario == 'domain' else None
                 if not only_test:
                     train_datasets.append(SubDataset(
-                        ASL_train, labels, target_transform=target_transform))
+                        fruits360_train, labels, target_transform=target_transform))
                 test_datasets.append(SubDataset(
-                    ASL_test, labels, target_transform=target_transform))
+                    fruits360_test, labels, target_transform=target_transform))
+    elif name == 'chars74K':
+        # check for number of tasks
+        if tasks > 10:
+            raise ValueError(
+                "Experiment 'chars74K' cannot have more than 10 tasks!")
+        # configurations
+        config = DATASET_CONFIGS['chars74K']
+        classes_per_task = int(np.floor(10 / tasks))
+        if not only_config:
+
+            # prepare train and test datasets with all classes
+            if not only_test:
+                chars74K_train = get_dataset('chars74K', type="train", dir=data_dir, normalize=normalize,
+                                        augment=augment, verbose=verbose)
+            chars74K_test = get_dataset(
+                'chars74K', type="test", dir=data_dir, normalize=normalize, verbose=verbose)
+            # generate labels-per-task
+            labels_per_task = [
+                list(np.array(range(classes_per_task)) + classes_per_task * task_id) for task_id in range(tasks)
+            ]
+            # split them up into sub-tasks
+            train_datasets = []
+            test_datasets = []
+            for labels in labels_per_task:
+                target_transform = transforms.Lambda(
+                    lambda y, x=labels[0]: y-x) if scenario == 'domain' else None
+                if not only_test:
+                    train_datasets.append(SubDataset(
+                        chars74K_train, labels, target_transform=target_transform))
+                test_datasets.append(SubDataset(
+                    chars74K_test, labels, target_transform=target_transform))
+    elif name == 'gtsrb':
+        # check for number of tasks
+        if tasks > 43:
+            raise ValueError(
+                "Experiment 'gtsrb' cannot have more than 43 tasks!")
+        # configurations
+        config = DATASET_CONFIGS['gtsrb']
+        classes_per_task = int(np.floor(43 / tasks))
+        if not only_config:
+            # prepare permutation to shuffle label-ids (to create different class batches for each random seed)
+            # prepare train and test datasets with all classes
+            if not only_test:
+                gtsrb_train = get_dataset('gtsrb', type="train", dir=data_dir, normalize=normalize,
+                                        augment=augment, verbose=verbose)
+            gtsrb_test = get_dataset(
+                'gtsrb', type="test", dir=data_dir, normalize=normalize, verbose=verbose)
+
+            # generate labels-per-task
+            labels_per_task = [
+                list(np.array(range(classes_per_task)) + classes_per_task * task_id) for task_id in range(tasks)
+            ]
+            # split them up into sub-tasks
+            train_datasets = []
+            test_datasets = []
+            for labels in labels_per_task:
+                target_transform = transforms.Lambda(
+                    lambda y, x=labels[0]: y-x) if scenario == 'domain' else None
+                if not only_test:
+                    train_datasets.append(SubDataset(
+                        gtsrb_train, labels, target_transform=target_transform))
+                test_datasets.append(SubDataset(
+                    gtsrb_test, labels, target_transform=target_transform))
             
     else:
         raise RuntimeError('Given undefined experiment: {}'.format(name))
