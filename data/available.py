@@ -104,6 +104,6 @@ DATASET_CONFIGS = {
     'cifar100': {'size': 32, 'channels': 3, 'classes': 100},
     'ASL':{'size':64,'channels':3,'classes':29},
     'fruits360': {'size': 32, 'channels': 3, 'classes': 131},
-    'chars74K': {'size': 64, 'channels': 3, 'classes': 10},
+    'chars74K': {'size': 64, 'channels': 3, 'classes': 62},
     'gtsrb': {'size': 32, 'channels': 3, 'classes': 43},
 }

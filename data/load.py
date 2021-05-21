@@ -277,12 +277,12 @@ def get_multitask_experiment(name, scenario, tasks, data_dir="./store/datasets",
                     fruits360_test, labels, target_transform=target_transform))
     elif name == 'chars74K':
         # check for number of tasks
-        if tasks > 10:
+        if tasks > 62:
             raise ValueError(
-                "Experiment 'chars74K' cannot have more than 10 tasks!")
+                "Experiment 'chars74K' cannot have more than 62 tasks!")
         # configurations
         config = DATASET_CONFIGS['chars74K']
-        classes_per_task = int(np.floor(10 / tasks))
+        classes_per_task = int(np.floor(62 / tasks))
         if not only_config:
 
             # prepare train and test datasets with all classes

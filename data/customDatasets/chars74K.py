@@ -37,7 +37,6 @@ class chars74K(Dataset):
         '''
         Download dataset if not present
         '''
-        #change link
         url = "https://drive.google.com/file/d/1XnA-CGAFwG-IYgbDzT5r2g5c1v2XBbcy/view?usp=sharing"
         id = url.split("/")[5]
         zipName = "chars74K.zip"
