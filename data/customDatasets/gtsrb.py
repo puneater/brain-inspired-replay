@@ -34,7 +34,7 @@ class gtsrb(Dataset):
         '''
         Download dataset if not present
         '''
-        url = "https://drive.google.com/file/d/1emXcqn3tF8t9OXojkXFfOQvGmnJdZec8/view?usp=sharing"
+        url = "https://drive.google.com/file/d/1XkxXFSNiWEfjpj3UlcUbRtNXOEVNT7lB/view?usp=sharing"
         id = url.split("/")[5]
         zipName = "gtsrb.zip"
         if not os.path.isdir(path):
