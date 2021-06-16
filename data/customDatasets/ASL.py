@@ -34,7 +34,7 @@ class ASL(Dataset):
         '''
         Download dataset if not present
         '''
-        url = "https://drive.google.com/file/d/19d3nqn0GgT4gYpzPWsIlQeaIoBNu9y6A/view?usp=sharing"
+        url = "https://drive.google.com/file/d/11Y7Xu48-JjIRcRwNGt5LyAQVfzZ-ZxIW/view?usp=sharing"
         id = url.split("/")[5]
         zipName = "ASL.zip"
         if not os.path.isdir(path):

@@ -32,7 +32,7 @@ class fruits360(Dataset):
         '''
         Download dataset if not present
         '''
-        url = "https://drive.google.com/file/d/1ewSDHHn3GnTOAuDzIfJUurciWUbFuYt0/view?usp=sharing"
+        url = "https://drive.google.com/file/d/1h96fQdKVII3nWvvrrO5KXIZ8msZSJ6wa/view?usp=sharing"
         id = url.split("/")[5]
         zipName = "fruits360.zip"
         if not os.path.isdir(path):

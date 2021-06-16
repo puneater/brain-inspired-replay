@@ -37,7 +37,7 @@ class chars74K(Dataset):
         '''
         Download dataset if not present
         '''
-        url = "https://drive.google.com/file/d/1XnA-CGAFwG-IYgbDzT5r2g5c1v2XBbcy/view?usp=sharing"
+        url = "https://drive.google.com/file/d/159fxSgC2UP9ZJd34TkbcR3x9OYw2dhJc/view?usp=sharing"
         id = url.split("/")[5]
         zipName = "chars74K.zip"
         if not os.path.isdir(path):
