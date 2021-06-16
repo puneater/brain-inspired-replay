@@ -245,12 +245,12 @@ def get_multitask_experiment(name, scenario, tasks, data_dir="./store/datasets",
                     ASL_test, labels, target_transform=target_transform))
     elif name == 'fruits360':
         # check for number of tasks
-        if tasks > 131:
+        if tasks > 81:
             raise ValueError(
-                "Experiment 'fruits360' cannot have more than 131 tasks!")
+                "Experiment 'fruits360' cannot have more than 81 tasks!")
         # configurations
         config = DATASET_CONFIGS['fruits360']
-        classes_per_task = int(np.floor(131 / tasks))
+        classes_per_task = int(np.floor(81 / tasks))
         if not only_config:
 
             # prepare train and test datasets with all classes
