@@ -149,27 +149,6 @@ if __name__ == '__main__':
     GR = {}
     GR = collect_all(GR, seed_list, args, name="GR")
 
-    ## BI-R
-    args.freeze_convE = True
-    args.hidden = True
-    args.prior = "GMM"
-    args.per_class = True
-    args.feedback = True
-    args.dg_gates = True
-    args.dg_prop = gating_prop
-    args.distill = True
-    BIR = {}
-    BIR = collect_all(BIR, seed_list, args, name="Brain-Inspired Replay (BI-R)")
-
-    ## BI-R & SI
-    if args.scenario=="class":
-        # -only for Class-IL scenario, for Task-IL adding SI does not help
-        args.si = True
-        args.dg_prop = args.dg_si_prop
-        args.si_c = args.dg_c
-        BIRpSI = {}
-        BIRpSI = collect_all(BIRpSI, seed_list, args, name="BI-R + SI")
-
 
     #-------------------------------------------------------------------------------------------------#
 
@@ -188,14 +167,14 @@ if __name__ == '__main__':
             OFF[seed][i]["average"], NONE[seed][i]["average"],
             LWF[seed][i]["average"], GR[seed][i]["average"],
             EWC[seed][i]["average"], SI[seed][i]["average"],
-            BIR[seed][i]["average"], BIRpSI[seed][i]["average"] if args.scenario=="class" else 0,
+            #BIR[seed][i]["average"], BIRpSI[seed][i]["average"] if args.scenario=="class" else 0,
         ]
         i = 1
         ave_prec[seed] = [
             OFF[seed][i], NONE[seed][i],
             LWF[seed][i], GR[seed][i],
             EWC[seed][i], SI[seed][i],
-            BIR[seed][i], BIRpSI[seed][i] if args.scenario=="class" else 0,
+            #BIR[seed][i], BIRpSI[seed][i] if args.scenario=="class" else 0,
         ]
 
     #-------------------------------------------------------------------------------------------------#
@@ -213,10 +192,9 @@ if __name__ == '__main__':
     x_axes = GR[args.seed][0]["x_task"]
 
     # select names / colors / ids
-    names = ["None", "LwF", "EWC", "SI", "Generative Replay (GR)", "Brain-Inspired Replay (BI-R)",
-             "BI-R + SI"  if args.scenario=="class" else "Joint"]
-    colors = ["grey", "goldenrod", "darkgreen", "yellowgreen", "red", "purple", "blue" if args.scenario=="class" else "black"]
-    ids = [1,2,4,5,3,6,7  if args.scenario=="class" else 0]
+    names = ["None", "LwF", "EWC", "SI", "Generative Replay (GR)" if args.scenario=="class" else "Joint"]
+    colors = ["grey", "goldenrod", "darkgreen", "yellowgreen", "red" if args.scenario=="class" else "black"]
+    ids = [1,2,4,5,3 if args.scenario=="class" else 0]
     if args.scenario=="class":
         names.append("Joint")
         colors.append("black")
