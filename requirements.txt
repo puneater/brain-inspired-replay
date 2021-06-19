@@ -1,7 +1,7 @@
 numpy==1.16.2
 scipy==1.1.0
-torch==1.8.1+cu101
-torchvision==0.9.1+cu101
+torch==1.9.0+cu102
+torchvision==0.10.0+cu102
 tqdm==4.19.9
 scikit-learn==0.20.3
 matplotlib==2.1.0
