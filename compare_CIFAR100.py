@@ -192,13 +192,13 @@ if __name__ == '__main__':
     x_axes = GR[args.seed][0]["x_task"]
 
     # select names / colors / ids
-    names = ["None", "LwF", "EWC", "SI", "Generative Replay (GR)" if args.scenario=="class" else "Joint"]
-    colors = ["grey", "goldenrod", "darkgreen", "yellowgreen", "red" if args.scenario=="class" else "black"]
-    ids = [1,2,4,5,3 if args.scenario=="class" else 0]
-    if args.scenario=="class":
+    names = ["None", "LwF", "EWC", "SI", "Generative Replay (GR)", "Joint"]
+    colors = ["grey", "goldenrod", "darkgreen", "yellowgreen", "red", "black"]
+    ids = [1,2,4,5,3,0]
+    '''if args.scenario=="class":
         names.append("Joint")
         colors.append("black")
-        ids.append(0)
+        ids.append(0)'''
 
     # open pdf
     pp = plt.open_pdf("{}/{}.pdf".format(args.p_dir, plot_name))
