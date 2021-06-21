@@ -127,14 +127,6 @@ if __name__ == '__main__':
     args.si = False
 
 
-    ###----"XdG"----####
-    if args.scenario=="task":
-        args.xdg = True
-        XDG = {}
-        XDG = collect_all(XDG, seed_list, args, name="Context-dependent Gating (XdG)")
-        args.xdg = False
-
-
     #-------------------------------------------------------------------------------------------------#
 
     #---------------------------#
@@ -156,10 +148,6 @@ if __name__ == '__main__':
         ave_prec[seed] = [
             OFF[seed][i], NONE[seed][i], LWF[seed][i], GR[seed][i], EWC[seed][i], SI[seed][i],
         ]
-        if args.scenario=="task":
-            ave_prec[seed].append(XDG[seed][1])
-            prec[seed].append(XDG[seed][0]["average"])
-
 
     #-------------------------------------------------------------------------------------------------#
 
@@ -175,15 +163,10 @@ if __name__ == '__main__':
     ylabel = "Test accucary ({} so far)".format("based on digits" if args.scenario=="class" else "on tasks")
     x_axes = NONE[args.seed][0]["x_task"]
 
-    # select names / colors / ids
-    if args.scenario=="task":
-        names = ["None", "EWC", "SI", "XdG", "LwF", "GR", "Joint" ]
-        colors = ["grey", "darkgreen", "yellowgreen", "deepskyblue", "goldenrod", "red", "black"]
-        ids = [1, 4, 5, 6, 2, 3, 0]
-    else:
-        names = ["None", "EWC", "SI", "LwF", "GR", "Joint" ]
-        colors = ["grey", "darkgreen", "yellowgreen", "goldenrod", "red", "black"]
-        ids = [1, 4, 5, 2, 3, 0]
+
+    names = ["None", "EWC", "SI", "LwF", "GR", "Joint" ]
+    colors = ["grey", "darkgreen", "yellowgreen", "goldenrod", "red", "black"]
+    ids = [1, 4, 5, 2, 3, 0]
 
     # open pdf
     pp = plt.open_pdf("{}/{}.pdf".format(args.p_dir, plot_name))
